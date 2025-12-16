@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="login.css">
+<title>Login Form</title>
+</head>
+<body>
+<div class="animated-background"></div>
+<div class="login-wrapper">
+  <div class="user-icon">
+    <img src="src/logo.png" alt="Logo" class="logo-img">
+  </div>
+  <div class="container" id="login-form">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="L22 6L12 13L2 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="login-email" name="login-email" placeholder="Email or Username" required />
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="password" id="login-password" name="login-password" placeholder="Password" required />
+      </div>
+
+      <button type="submit">LOGIN</button>
+    </form>
+
+    <div id="message" style="margin-top:12px;color:#fff;text-align:center;display:none;font-size:14px;"></div>
+    <div style="margin-top:20px; text-align:center;">
+      <span style="color:rgba(255,255,255,0.8);">don't have an account? </span>
+      <a href="registration.html" style="color:#fff; text-decoration:underline;font-weight:500;">Sign up</a>
+    </div>
+  </div>
+</div>
+
+  <!-- Firebase (compat) CDN + local config/init. Required for Firebase Auth helpers to work. -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-init.js"></script>
+
+  <script>
+  document.querySelector('#loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const emailOrUsername = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+    const messageEl = document.getElementById('message');
+
+    function showMessage(text, isError = true){
+      messageEl.textContent = text;
+      messageEl.style.color = isError ? 'red' : 'green';
+      messageEl.style.display = 'block';
+      setTimeout(()=>{ messageEl.style.display = 'none'; }, 4000);
+    }
+
+    // Check for admin credentials
+    if(emailOrUsername === 'admin' && password === '0304'){
+      localStorage.setItem('currentEmployeeId', 'ADMIN');
+      localStorage.setItem('currentEmployeeName', 'Admin');
+      alert('Admin login successful! Redirecting to Admin Dashboard...');
+      window.location.href = 'admin_dashboard.html';
+      return;
+    }
+
+    // If Firebase auth helpers are available, use them (this will create Auth session visible in Firebase Console)
+    if(window.siasystemSignIn){
+      // If user entered a username instead of email, we cannot sign in by username with Firebase Auth.
+      // Try sign in directly by treating input as email. If sign-in fails and input looks like a username,
+      // fall back to the localStorage lookup.
+      window.siasystemSignIn(emailOrUsername, password)
+        .then(() => {
+          // Successful Firebase sign-in
+          // You can store minimal profile in localStorage or DB if needed
+          localStorage.setItem('currentEmployeeName', emailOrUsername);
+          alert('Login successful! Redirecting to Employee Dashboard...');
+          window.location.href = 'employee_dashboard.html';
+        })
+        .catch(err => {
+          // If sign-in failed and input is not an email, try to resolve username -> email via Firestore
+          if(!emailOrUsername.includes('@') && window.firebase && firebase.firestore){
+            firebase.firestore().collection('employees')
+              .where('username','==', emailOrUsername)
+              .limit(1)
+              .get()
+              .then(snapshot => {
+                if(snapshot.empty){
+                  // fallback to localStorage (old behavior) for users created locally
+                  const empCredentials = JSON.parse(localStorage.getItem('payroll_credentials') || '{}');
+                  let foundEmployee = null;
+                  let employeeId = null;
+                  for(const empId in empCredentials){
+                    const cred = empCredentials[empId];
+                    if((cred.email === emailOrUsername || cred.username === emailOrUsername) && cred.password === password){
+                      foundEmployee = cred;
+                      employeeId = empId;
+                      break;
+                    }
+                  }
+                  if(!foundEmployee){ showMessage('Wrong username/email or password!'); return; }
+                  localStorage.setItem('currentEmployeeId', employeeId);
+                  localStorage.setItem('currentEmployeeName', foundEmployee.fullname);
+                  alert('Login successful! Redirecting to Employee Dashboard...');
+                  window.location.href = 'employee_dashboard.html';
+                  return;
+                }
+                const doc = snapshot.docs[0];
+                const data = doc.data();
+                const resolvedEmail = data.email;
+                // Try signing in with the resolved email
+                return window.siasystemSignIn(resolvedEmail, password)
+                  .then(()=>{
+                    localStorage.setItem('currentEmployeeId', doc.id);
+                    localStorage.setItem('currentEmployeeName', data.fullname || resolvedEmail);
+                    alert('Login successful! Redirecting to Employee Dashboard...');
+                    window.location.href = 'employee_dashboard.html';
+                  })
+                  .catch(innerErr => {
+                    showMessage(innerErr.message || 'Sign-in failed');
+                  });
+              })
+              .catch(fsErr => { showMessage(fsErr.message || 'Sign-in failed'); });
+            return;
+          }
+          // Show the Firebase error for email-based attempts or when Firestore not available
+          showMessage(err.message || 'Sign-in failed');
+        });
+      return;
+    }
+
+    // No Firebase helper available — fall back to existing localStorage behavior
+    const empCredentials = JSON.parse(localStorage.getItem('payroll_credentials') || '{}');
+    
+    // Find matching credential
+    let foundEmployee = null;
+    let employeeId = null;
+    
+    for(const empId in empCredentials){
+      const cred = empCredentials[empId];
+      if((cred.email === emailOrUsername || cred.username === emailOrUsername) && cred.password === password){
+        foundEmployee = cred;
+        employeeId = empId;
+        break;
+      }
+    }
+
+    if(!foundEmployee){
+      messageEl.textContent = 'Wrong username/email or password!';
+      messageEl.style.display = 'block';
+      return;
+    }
+
+    // Store current logged-in employee ID
+    localStorage.setItem('currentEmployeeId', employeeId);
+    localStorage.setItem('currentEmployeeName', foundEmployee.fullname);
+    
+    alert('Login successful! Redirecting to Employee Dashboard...');
+    window.location.href = 'employee_dashboard.html';
+  });
+</script>
+
+  
+</div>
+</body>
+</html>

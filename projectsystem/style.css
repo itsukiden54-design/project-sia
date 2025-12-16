@@ -1,0 +1,45 @@
+/* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f6f6;
+}
+.form-container, .dashboard-container {
+  background: #fff;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+input[type="text"], input[type="password"], select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+button {
+  background: #007bff;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background: #0056b3;
+}
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}

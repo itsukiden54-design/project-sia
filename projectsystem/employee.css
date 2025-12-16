@@ -1,0 +1,588 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Hide scrollbars but keep scrolling functionality */
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #a8c8f0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard {
+    padding: 12px;
+    max-width: 1400px;
+    margin: 20px auto;
+    background: transparent;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+#requestsSection {
+    width: 3100px !important;
+    height: 500px !important;
+    max-width: 1200px !important;
+    margin-left: 30px !important;
+    margin-right: auto !important;
+}
+
+
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    text-align: center;
+    color: #1e3a5f;
+    margin-bottom: 22px;
+    font-weight: 600;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.section {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    color: #222;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+    animation: cardSlideIn 0.5s ease-out backwards;
+}
+
+@keyframes cardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section:nth-child(1) { animation-delay: 0.1s; }
+.section:nth-child(2) { animation-delay: 0.2s; }
+.section:nth-child(3) { animation-delay: 0.3s; }
+
+.section:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.75);
+}
+
+ul {
+    margin: 10px 0 0 22px;
+}
+
+.logout-btn {
+    display: block;
+    margin: 30px auto 0;
+    background: linear-gradient(135deg, #1e3a5f, #2d4a6f);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.3);
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #2d4a6f, #1e3a5f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(30, 58, 95, 0.4);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
+
+/* Employee dashboard specific styles and overrides */
+.controls{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:16px;
+    margin-top:0;
+    padding: 16px;
+}
+
+.dashboard > div:not(header) {
+    padding: 0 !important;
+}
+
+.card{
+    background:rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding:16px;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(30, 58, 95, 0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+    animation: cardSlideIn 0.5s ease-out backwards;
+}
+
+#requestsList {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+#rightCard {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(30, 58, 95, 0.15);
+}
+
+.section h2{
+    margin:0 0 12px 0;
+    color: #1e3a5f;
+    font-weight: 600;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    animation: fadeIn 0.6s ease-out;
+}
+
+th,td{
+    padding:12px 8px;
+    text-align:left;
+    border-bottom:1px solid rgba(30, 58, 95, 0.1);
+    font-size:14px;
+    transition: background 0.2s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+tr:hover td {
+    background: rgba(30, 58, 95, 0.05);
+}
+
+th{
+    color:#1e3a5f;
+    font-weight:600;
+    background: rgba(30, 58, 95, 0.05);
+}
+
+.actions button{
+    padding:6px 12px;
+    font-size:13px;
+    border-radius:8px;
+    transition: all 0.3s ease;
+}
+
+.actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+}
+
+.secondary{
+    background:transparent;
+    color:#1e3a5f;
+    border:2px solid rgba(30, 58, 95, 0.3);
+    padding:8px 12px;
+    border-radius:8px;
+    transition: all 0.3s ease;
+}
+
+.secondary:hover {
+    background: rgba(30, 58, 95, 0.1);
+    border-color: #1e3a5f;
+    transform: translateY(-2px);
+}
+
+.warn{
+    background:linear-gradient(135deg, #dc2626, #b91c1c);
+    color:#fff;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.warn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+.muted{
+    color:#6b7280;
+}
+
+/* Payslips specific styles */
+.download-btn{
+    background:linear-gradient(135deg, #10b981, #059669);
+    border:none;
+    color:#fff;
+    padding:8px 12px;
+    border-radius:8px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.download-btn svg{
+    display:block;
+}
+
+#salarySummary{
+    color:#000000;
+    font-size:14px;
+}
+
+#salaryPageIndicator{
+    min-width:34px;
+    text-align:center;
+    padding:6px 10px;
+    border-radius:8px;
+    background:linear-gradient(135deg, #dc2626, #b91c1c);
+    color:#fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+#salaryPrev, #salaryNext{
+    background:transparent;
+    border:2px solid rgba(30, 58, 95, 0.3);
+    color:#1e3a5f;
+    padding:8px 12px;
+    border-radius:8px;
+    transition: all 0.3s ease;
+}
+
+#salaryPrev:hover, #salaryNext:hover {
+    background: rgba(30, 58, 95, 0.1);
+    border-color: #1e3a5f;
+    transform: translateY(-2px);
+}
+
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(30, 58, 95, 0.6);
+    backdrop-filter: blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal{
+    background:rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding:20px;
+    border-radius:16px;
+    min-width:320px;
+    max-width:520px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+#payslipLogo {
+    height: 50px;
+    width: auto;
+    max-width: 100px;
+    object-fit: contain;
+}
+
+label{
+    display:block;
+    margin-top:8px;
+    font-size:13px;
+    font-weight: 500;
+    color: #000000;
+}
+
+input[type=text], input[type=date], input[type=number], input[type=search], select, textarea{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:2px solid rgba(30, 58, 95, 0.2);
+    margin-top:6px;
+    box-sizing:border-box;
+    font-size:14px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.9);
+}
+
+input[type=text]:focus, input[type=date]:focus, input[type=number]:focus, input[type=search]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #000000;
+    box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+    background: #fff;
+}
+
+textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+@media(max-width:1440px){
+    .dashboard {
+        padding: 16px;
+        max-width: 1200px;
+    }
+    .layout{
+        grid-template-columns:1fr 300px;
+        gap:14px;
+    }
+    #requestsSection {
+        width: calc(100% - 60px) !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+    }
+}
+
+@media(max-width:1024px){
+    .dashboard {
+        padding: 14px;
+        margin: 16px auto;
+    }
+    .layout{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+    .controls{
+        flex-direction:row;
+        flex-wrap:wrap;
+    }
+    
+    table{
+        font-size: 13px;
+        width: 100%;
+        overflow-x: auto;
+    }
+    th,td{
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+    
+    #requestsSection {
+        width: calc(100% - 24px) !important;
+        max-width: 100% !important;
+        margin: 12px auto !important;
+        height: auto !important;
+        overflow-x: auto !important;
+    }
+}
+
+@media(max-width:768px){
+    body {
+        font-size: 14px;
+    }
+    
+    .dashboard {
+        padding: 12px;
+        margin: 12px auto;
+    }
+    
+    h1 {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+    
+    h2, .section h2 {
+        font-size: 16px;
+    }
+    
+    .section, .card {
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+    }
+    
+    .layout{
+        gap: 10px;
+    }
+    
+    table{
+        font-size: 12px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    th,td{
+        padding: 8px 5px;
+        font-size: 12px;
+    }
+    
+    .controls {
+        gap: 8px;
+        padding: 0;
+    }
+    
+    .controls button {
+        padding: 8px 12px;
+        font-size: 12px;
+        flex: 1;
+    }
+    
+    .logout-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+        margin: 16px auto 0;
+    }
+    
+    .card {
+        overflow-x: auto;
+    }
+    
+    #requestsSection {
+        width: calc(100% - 16px) !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 10px auto !important;
+        overflow-x: auto !important;
+    }
+}
+
+@media(max-width:480px){
+    body {
+        font-size: 13px;
+    }
+    
+    .dashboard {
+        padding: 10px;
+        margin: 10px auto;
+    }
+    
+    h1 {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    
+    h2, .section h2 {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    
+    .section, .card {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(30, 58, 95, 0.08);
+    }
+    
+    table{
+        font-size: 11px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    th,td{
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    .controls {
+        gap: 6px;
+        flex-direction: column;
+    }
+    
+    .controls button {
+        padding: 8px 10px;
+        font-size: 11px;
+        width: 100%;
+    }
+    
+    .logout-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+        margin: 12px auto 0;
+        width: 90%;
+    }
+    
+    ul {
+        margin: 8px 0 0 16px;
+        padding-left: 0;
+        font-size: 12px;
+    }
+    
+    ul li {
+        margin-bottom: 4px;
+    }
+    
+    #requestsSection {
+        width: calc(100% - 12px) !important;
+        max-width: 100% !important;
+        height: auto !important;
+        margin: 8px auto !important;
+        overflow-x: auto !important;
+        padding: 8px !important;
+    }
+}

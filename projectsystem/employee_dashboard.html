@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Employee Dashboard</title>
+  <style>
+    
+  </style>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="employee.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Employee Portal</h2>
+      </div>
+      <div class="admin-profile">
+        <div class="admin-avatar">E</div>
+        <div class="admin-info">
+          <div id="empUsername" class="admin-name">Employee</div>
+          <div class="admin-status"><span class="status-dot online"></span><span id="empStatus">Online</span></div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="nav-link active" data-section="home">Home</a></li>
+          <li><a href="#" class="nav-link" data-section="requests">Leave Requests</a></li>
+        </ul>
+      </nav>
+      <button class="logout-btn-sidebar" onclick="logout()">Logout</button>
+    </aside>
+
+    <div class="dashboard">
+      <div class="layout">
+        <main>
+          <div class="card section">
+            <h2>My Profile</h2>
+            <div style="display:flex;gap:18px;align-items:center">
+              <div style="width:72px;height:72px;border-radius:12px;background:linear-gradient(180deg,#eef7ff,#fff);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)">E</div>
+              <div>
+                <div id="empName" style="font-weight:700">—</div>
+                <div class="muted" id="empRole">—</div>
+                <div class="muted" id="empId">—</div>
+                <div class="muted" id="empAttendanceId" style="margin-top:6px"> </div>
+              </div>
+            </div>
+            <!-- Time In / Time Out buttons removed from employee view -->
+            <!-- Download / Request actions removed from employee view per request -->
+          </div>
+
+          <div class="card section" style="margin-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <h2 style="margin:0">Recent Payslips</h2>
+              <div style="display:flex;align-items:center;gap:12px">
+                <button id="payslipPrevMonth" class="secondary" style="padding:6px 12px">◀ Previous</button>
+                <div id="payslipMonthLabel" style="min-width:180px;text-align:center;font-weight:600;color:#1e3a5f">—</div>
+                <button id="payslipNextMonth" class="secondary" style="padding:6px 12px">Next ▶</button>
+              </div>
+            </div>
+            <div style="overflow:auto;max-height:420px;scrollbar-width:none;-ms-overflow-style:none" class="scrollable-content">
+              <style>.scrollable-content::-webkit-scrollbar{display:none}</style>
+              <table id="payslipTable">
+                <thead>
+                  <tr><th>Date</th><th>Gross</th><th>Net</th><th>Status</th><th class="muted">Actions</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Full Requests Section (shown when clicking Requests in sidebar) -->
+          <div id="requestsSection" class="card section" style="margin-top:12px;display:none;max-width:1200px;margin-left:auto;margin-right:auto">
+            <!-- Apply for Leave card -->
+            <div style="margin-bottom:32px">
+              <div style="background:#fff;padding:16px;border-radius:8px;border:1px solid #eef2f7">
+                <h2 style="margin-top:0">Apply for Leave</h2>
+                <form id="leaveForm">
+                  <label for="leaveDates">Leave Dates</label>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="leaveFrom" type="date" required /><input id="leaveTo" type="date" required /></div>
+                  <div class="muted" style="font-size:12px;margin-bottom:8px">You can select date range for your leave.</div>
+
+                  <label for="leaveMessage">Reason</label>
+                  <textarea id="leaveMessage" rows="6" style="width:100%;resize:none;" required></textarea>
+
+                  <label for="leaveType" style="margin-top:8px">Leave Type</label>
+                  <select id="leaveType" required style="padding:8px;border:1px solid #d1d5db;border-radius:6px;width:100%">
+                    <option value="">Please make a choice</option>
+                    <option>Casual Leave</option>
+                    <option>Medical / Sick Leave</option>
+                    <option>Maternity Leave</option>
+                  </select>
+
+                  <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+                    <button type="reset" class="secondary">Reset</button>
+                    <button type="submit">Apply for Leave</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- My Leaves card placed below Apply for Leave -->
+            <div>
+              <div style="background:#fff;padding:16px;border-radius:8px;border:1px solid #eef2f7">
+                <h2 style="margin-top:0">My Leaves</h2>
+                <div style="overflow:auto;max-height:420px">
+                  <div id="myRequestsControls" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:12px;flex-wrap:wrap">
+                   
+                  </div>
+                  <table id="myRequestsTable" style="width:100%;border-collapse:collapse;table-layout:fixed;word-wrap:break-word;white-space:normal;">
+                    <thead>
+                      <tr>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:2%">#</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:8%">SUBJECT</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:10%">DATES</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:44%;word-wrap:break-word;white-space:normal">REASON</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:9%">TYPE</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:6%">STATUS</th>
+                        <th style="padding:8px;border-bottom:2px solid #e6e9ee;width:6%">ACTION</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside>
+          <div id="rightCard" class="card">
+            
+            <!-- 'Annual' label removed per request -->
+            <div id="empSalary" style="font-weight:700;margin-top:6px">—</div>
+            <hr style="margin:12px 0">
+            <h3>Requests</h3>
+            <div id="requestsList" class="muted">No requests</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payslip modal -->
+  <div id="payslipModal" class="modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin:0">Paystub</h3>
+        <img id="payslipLogo" src="src/logo.png" alt="Company Logo" style="height:50px;width:auto;max-width:100px">
+      </div>
+      <div id="payslipContent"></div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+        <button id="closePayslip" class="secondary">Close</button>
+        <button id="downloadPayslipBtn" style="background:#10b981;color:#fff">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request modal -->
+  <div id="requestModal" class="modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="modal">
+      <h3>Request Time Off</h3>
+      <form id="requestForm">
+        <label for="fromDate">From</label>
+        <input id="fromDate" type="date" required />
+        <label for="toDate">To</label>
+        <input id="toDate" type="date" required />
+        <label for="reason">Reason</label>
+        <input id="reason" type="text" required />
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button type="button" id="cancelRequest" class="secondary">Cancel</button>
+          <button type="submit">Send Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Cancel confirmation modal -->
+  <div id="cancelConfirmModal" class="modal-backdrop" role="dialog" aria-hidden="true" style="display:none;">
+    <div class="modal">
+      <h3>Confirm Cancellation</h3>
+      <div id="cancelConfirmMessage" style="margin-top:8px;color:#111">Are you sure you want to cancel this request?</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button id="cancelConfirmNo" class="secondary">No</button>
+        <button id="cancelConfirmYes" style="background:#ef4444;color:#fff">Yes, Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase (compat) SDK and init so employee.js can resolve Firebase users -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-init.js"></script>
+  <script src="employee.js"></script>
+                    </tbody>
+                  </table>
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                    <div id="requestsSummary" class="muted"></div>
+                    <div id="requestsPagination"></div>
+                  </div>

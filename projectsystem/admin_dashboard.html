@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Admin Payroll Dashboard</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>C4S Food Solution</h2>
+      </div>
+      
+      <div class="admin-profile">
+        <div class="admin-avatar">A</div>
+        <div class="admin-info">
+          <div class="admin-name">Admin</div>
+          <div class="admin-status">
+            <span class="status-dot online"></span>
+            Online
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="#" class="nav-link active" data-section="home"> Home</a></li>
+          <li><a href="#" class="nav-link" data-section="attendance"> Attendance</a></li>
+          <li><a href="#" class="nav-link" data-section="employees"> Employees Section</a></li>
+          <li><a href="#" class="nav-link" data-section="archive"> Archive</a></li>
+          <li><a href="#" class="nav-link" data-section="timeclock"> Time Clock</a></li>
+          <li><a href="#" class="nav-link" data-section="salary"> Salary Slips</a></li>
+          <li><a href="#" class="nav-link" data-section="payroll"> Payroll</a></li>
+          <li><a href="#" class="nav-link" data-section="leaves"> Leave Management</a></li>
+        </ul>
+      </nav>
+
+      <button class="logout-btn-sidebar" onclick="window.location.href='login.html'">Logout</button>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard">
+    <header>
+      <div class="controls">
+        <!-- Header search and top actions removed; employees page will show the search inside the white card per design. -->
+        <div class="top-actions"></div>
+      </div>
+    </header>
+
+    <div id="home" class="section-content active">
+      
+      <div class="layout">
+        <div>
+          <div class="card section">
+            <h2>Dashboard Overview</h2>
+            <div class="stats">
+              <div class="stat" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px">
+                <div class="muted">Total Employees</div>
+                <div id="homeEmployeeCount" style="font-size:32px;font-weight:700;color:#1f2937;margin-top:8px">0</div>
+              </div>
+              <div class="stat" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px">
+                <div class="muted">Pending Payslips</div>
+                <div id="pendingPayslipsCount" style="font-size:32px;font-weight:700;color:#1f2937;margin-top:8px">0</div>
+              </div>
+              <div class="stat" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px">
+                <div class="muted">Pending Leaves</div>
+                <div id="pendingLeavesCount" style="font-size:32px;font-weight:700;color:#1f2937;margin-top:8px">0</div>
+              </div>
+              <div class="stat" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px">
+                <div class="muted">Total Lates </div>
+                <div id="homeLateCount" style="font-size:32px;font-weight:700;color:#1f2937;margin-top:8px">0</div>
+              </div>
+
+              <div class="stat" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:20px">
+                <div class="muted">Total Absents</div>
+                <div id="homeAbsentCount" style="font-size:32px;font-weight:700;color:#1f2937;margin-top:8px">0</div>
+              </div>
+          
+            </div>
+          </div>
+
+          <!-- Weekly attendance chart card -->
+          <div class="card section" style="margin-top:16px">
+            <h2>Weekly Attendance Summary</h2>
+            <div style="display:flex;flex-direction:column;gap:10px;padding:8px 0">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-weight:600;color:#374151">Attendance (Sun → Sat)</div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <button id="chartPrevWeek" class="secondary">◀ Previous</button>
+                  <div id="chartWeekLabel" style="min-width:200px;text-align:center;font-weight:600;color:#374151">—</div>
+                  <button id="chartNextWeek" class="secondary">Next ▶</button>
+                </div>
+              </div>
+
+              <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid #eef2f7">
+                <canvas id="attendanceWeekChart" style="width:100%;height:180px"></canvas>
+              </div>
+
+                <div style="display:flex;justify-content:flex-end;gap:8px;align-items:center">
+                <button id="printAttendanceReport" class="secondary">Print Attendance Report (week)</button>
+                <button id="downloadAttendanceReport" class="secondary">Download Attendance PDF (week)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employee weekly performance (stacked) -->
+          <div class="card section" style="margin-top:16px">
+            <h2>Employee Weekly Performance</h2>
+            <div style="display:flex;flex-direction:column;gap:8px;padding:8px 0">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-weight:600;color:#374151">Performance (per week)</div>
+                <div style="display:flex;gap:12px;align-items:center">
+                  <button id="perfPrevWeek" class="secondary">◀ Previous</button>
+                  <div id="perfWeekLabel" style="min-width:200px;text-align:center;font-weight:600;color:#374151">—</div>
+                  <button id="perfNextWeek" class="secondary">Next ▶</button>
+                  <div id="perfSummaryText" style="font-weight:700;color:#111;margin-left:12px">—</div>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <input type="text" id="perfSearchInput" placeholder="Search employee (name or ID)..." style="flex:1;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Arial">
+                <button id="perfSearchClear" class="secondary" style="padding:8px 12px">Clear</button>
+              </div>
+
+              <div style="background:#fff;padding:12px;border-radius:8px;border:1px solid #eef2f7">
+                <canvas id="employeePerformanceChart" style="width:100%;height:200px"></canvas>
+              </div>
+
+              <div style="display:flex;justify-content:flex-start;align-items:center;gap:12px;font-size:13px;color:#374151;margin-top:8px">
+                <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:12px;height:12px;background:#059669;border-radius:2px"></span> On-time</div>
+                <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:12px;height:12px;background:#f59e0b;border-radius:2px"></span> Late</div>
+                <div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:12px;height:12px;background:#9ca3af;border-radius:2px"></span> Absent</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions removed as requested -->
+        </div>
+
+        <!-- Right column: Weekly payslip status (syncs with attendance week) -->
+        <aside>
+          <div class="card" style="min-width:260px;display:flex;flex-direction:column;justify-content:space-between;height:588px">
+            <h3 style="margin-top:0;margin-bottom:8px">Payslip Status (week)</h3>
+            <div style="display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:8px">
+              <button id="sideWeekPrev" class="secondary">◀ Prev</button>
+              <div id="sideWeekLabel" style="font-weight:600;color:#374151">—</div>
+              <button id="sideWeekNext" class="secondary">Next ▶</button>
+            </div>
+
+            <div id="sidePayslipList" style="flex:1;overflow:auto;padding:6px;border-radius:6px;border:1px solid #eef2f7;background:#fff;min-height:220px;">
+              <div class="muted" style="padding:8px">No week selected or no payslips found for this week.</div>
+            </div>
+            <div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;justify-content:flex-start">
+                <button id="printSidePayslip" class="secondary">Print Payslip Status (week)</button>
+                <button id="downloadSidePayslip" class="secondary">Download CSV (week)</button>
+              </div>
+             
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="attendance" class="section-content">
+      <div class="card section attendance-card">
+        <h2>Attendance Records</h2>
+        <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <label style="font-weight:600;color:#374151">Search:</label>
+            <input id="attendanceSearch" class="search" placeholder="Type employee name or ID to filter" />
+          </div>
+          <div id="attendanceWeekRange" style="font-weight:600;color:#374151"></div>
+        </div>
+        <!-- Table wrapper: only the table scrolls now -->
+        <div class="attendance-table-wrapper" style="max-height:520px;overflow:auto">
+          <table id="attendanceTable" style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">DATE</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">NAME</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">ATTENDANCE ID</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">TIME IN</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">TIME OUT</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">WORK HOURS</th>
+                <th style="padding:12px 8px;text-align:left;border-bottom:2px solid #e6e9ee;font-weight:600;background:#f9fafb">STATUS</th>
+                <!-- Action column removed as requested -->
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Pagination stays visible below the scrollable table -->
+        <div class="attendance-pagination" style="display:flex;align-items:center;justify-content:flex-end;margin-top:12px;gap:8px">
+          <button id="attendancePrev" class="secondary">Previous</button>
+          <div id="attendancePageIndicator" style="min-width:32px;text-align:center;padding:6px 8px;border-radius:6px;background:#ef4444;color:#fff">1</div>
+          <button id="attendanceNext" class="secondary">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="employees" class="section-content">
+      <div class="card section">
+        <div style="overflow:auto;max-height:600px;padding:12px;background:#fff;border-radius:8px;border:1px solid #eef2f7">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+            <input id="search" class="search" placeholder="Search by name, role, or id" style="width:340px;padding:8px" />
+          </div>
+          <table id="employeesTable">
+            <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Salary (weekly ₱)</th>
+                  <th class="muted">Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+        <div id="archive" class="section-content">
+          <div class="card section">
+            <h2>Archived Employees</h2>
+            <div style="overflow:auto;max-height:600px">
+              <table id="archiveTable">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Salary (weekly ₱)</th>
+                    <th class="muted">Result</th>
+                    <th class="muted">Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="salary" class="section-content">
+      <div class="card section">
+        <h2>Salary Slips</h2>
+        <div style="max-height:720px;overflow:auto">
+          <div id="salarySlipsContainer">
+            <p class="muted">Run payroll first to generate salary slips.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="payroll" class="section-content">
+      <div class="card section">
+        <h2>Payroll</h2>
+        <div style="max-height:600px;overflow:auto">
+          <div style="margin-bottom:10px;display:flex;flex-direction:column;gap:8px;align-items:stretch">
+  
+            <!-- Inline Run Payroll form (moved from modal) -->
+            <div id="payrollInlineForm" style="background:#ffffff;padding:12px;border-radius:8px;border:1px solid #eef2f7;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center">
+                <div style="display:flex;flex-direction:column">
+                  <label style="font-weight:600">Employee</label>
+                  <select id="payrollInlineEmployeeSelect" style="padding:8px;min-width:220px"></select>
+                </div>
+                <div style="display:flex;flex-direction:column">
+                  <label style="font-weight:600">Week</label>
+                  <select id="payrollInlineWeekSelect" style="padding:8px;min-width:160px"></select>
+                </div>
+                <div style="margin-left:auto;color:#6b7280;font-size:13px">Each day = ₱510 (8h)</div>
+              </div>
+
+              <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <div><strong>Days:</strong> <span id="payrollInlineDays">0</span></div>
+                <div><strong>Hours:</strong> <span id="payrollInlineHours">0</span></div>
+                <div><strong>Gross:</strong> <span id="payrollInlineGross">₱0.00</span></div>
+                <div><strong>Statutory:</strong> <span id="payrollInlineStat">₱0.00</span></div>
+                <div><strong>Net:</strong> <span id="payrollInlineNet">₱0.00</span></div>
+              </div>
+
+              <div id="payrollInlineNotice" style="margin-top:4px;color:#b91c1c;font-weight:700"></div>
+
+              <div style="border-top:1px solid #eef2f7;padding-top:6px">
+                <h4 style="margin:6px 0">Late / Deductions</h4>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <div style="display:flex;flex-direction:column">
+                    <label style="font-size:13px">Late Hours (h)</label>
+                    <input id="payrollInlineLateHours" type="number" min="0" step="0.25" style="padding:6px;width:120px" value="0" />
+                  </div>
+                  <div style="display:flex;flex-direction:column">
+                    <label style="font-size:13px">Late Minutes (m)</label>
+                    <input id="payrollInlineLateMinutes" type="number" min="0" max="59" style="padding:6px;width:120px" value="0" />
+                  </div>
+                  <div style="margin-left:12px;display:flex;flex-direction:column">
+                    <label style="font-size:13px">Late Deduction</label>
+                    <div id="payrollInlineLateDeduction" style="padding:6px;color:#111;font-weight:700">₱0.00</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;justify-content:flex-end;gap:8px">
+                <button id="payrollInlineCancel" class="secondary">Cancel</button>
+                <button id="payrollInlineConfirm">Confirm Run Payroll</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- payroll runs removed per request -->
+        </div>
+      </div>
+    </div>
+
+    <div id="leaves" class="section-content">
+      <div class="card section">
+        <h2>Leave Management</h2>
+        <div style="max-height:600px;overflow:auto">
+          <div id="leaveRequestsContainer">
+                <div style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <button id="leavesPrevWeek" class="secondary">◀ Prev</button>
+                    <div id="leavesWeekLabel" style="font-weight:600;color:#374151;min-width:220px;text-align:center">—</div>
+                    <button id="leavesNextWeek" class="secondary">Next ▶</button>
+                  </div>
+                  <div>
+                    Search: <input id="leavesSearch" class="search" placeholder="Search..." />
+                  </div>
+                </div>
+            <!-- Make the table area scroll independently and taller so the card can expand visually -->
+            <div style="max-height:440px;overflow:auto;border-radius:6px;border:1px solid #eef2f7;background:#fff;padding:6px">
+              <table id="leavesTable" style="width:100%;border-collapse:collapse">
+                <thead>
+                  <tr>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">#</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">NAME</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">DATES</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">REASON</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">TYPE</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">STATUS</th>
+                    <th style="padding:10px;border-bottom:2px solid #e6e9ee">ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+              <div id="leavesSummary" class="muted">Showing 0 to 0 of 0 entries</div>
+              <!-- pagination removed as requested (no bottom prev/number/next) -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="timeclock" class="section-content">
+      <div class="card section">
+        <h2>Time Clock</h2>
+        <div id="timeclockContainer" style="overflow:auto;max-height:600px">
+          <!-- Admin time in/out controls will be rendered here -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal -->
+  <div id="payrollModal" class="modal-backdrop" role="dialog" aria-hidden="true" style="display:none">
+    <div class="modal" role="document" style="max-width:600px;width:95%">
+      <h3>Run Payroll</h3>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+        <div style="display:flex;flex-direction:column">
+          <label style="font-weight:600">Employee</label>
+          <select id="payrollEmployeeSelect" style="padding:8px;min-width:220px"></select>
+        </div>
+        <div style="display:flex;flex-direction:column;margin-left:12px">
+          <label style="font-weight:600">Week</label>
+          <select id="payrollWeekSelect" style="padding:8px;min-width:160px"></select>
+        </div>
+        <div style="margin-left:auto;color:#6b7280;font-size:13px">Each day = ₱510 (8h)</div>
+      </div>
+      <div style="border-top:1px solid #eef2f7;padding-top:12px;margin-bottom:12px">
+        <div id="payrollResult" style="display:flex;gap:16px;align-items:center">
+          <div><strong>Days:</strong> <span id="payrollDays">0</span></div>
+          <div><strong>Hours:</strong> <span id="payrollHours">0</span></div>
+          <div><strong>Gross:</strong> <span id="payrollGross">₱0.00</span></div>
+          <div><strong>Statutory:</strong> <span id="payrollStat">₱0.00</span></div>
+          <div><strong>Net:</strong> <span id="payrollNet">₱0.00</span></div>
+        </div>
+        <div id="payrollNotice" style="margin-top:8px;color:#b91c1c;font-weight:700"></div>
+      </div>
+      <div style="border-top:1px solid #eef2f7;padding-top:12px;margin-bottom:12px">
+        <h4 style="margin:6px 0">Late / Deductions</h4>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;flex-direction:column">
+            <label style="font-size:13px">Late Hours (h)</label>
+            <input id="payrollLateHours" type="number" min="0" step="0.25" style="padding:6px;width:120px" value="0" />
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <label style="font-size:13px">Late Minutes (m)</label>
+            <input id="payrollLateMinutes" type="number" min="0" max="59" style="padding:6px;width:120px" value="0" />
+          </div>
+          <div style="margin-left:12px;display:flex;flex-direction:column">
+            <label style="font-size:13px">Late Deduction</label>
+            <div id="payrollLateDeduction" style="padding:6px;color:#111;font-weight:700">₱0.00</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button id="payrollCancel" class="secondary">Cancel</button>
+        <button id="payrollConfirm">Confirm Run Payroll</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal" class="modal-backdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document">
+      <h3 id="modalTitle">Add Employee</h3>
+      <form id="employeeForm">
+        <label for="empName">Full name</label>
+        <input id="empName" type="text" required />
+        <label for="empRole">Role</label>
+        <select id="empRole" required style="padding:8px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;font-family:Arial;width:100%;background:#fff;color:#111">
+          <option value="" disabled selected>Select Role</option>
+          <option value="Cashier">Cashier</option>
+          <option value="Delivery Driver">Delivery Driver</option>
+          <option value="Janitor">Janitor</option>
+          <option value="Manager">Manager</option>
+          <option value="HR Staff">HR Staff</option>
+          <option value="Delivery Staff">Delivery Staff</option>
+        </select>
+        <div class="row">
+          <div class="col">
+            <label for="empSalary">Salary (weekly ₱)</label>
+            <input id="empSalary" type="number" min="0" step="0.01" placeholder="Enter weekly salary in pesos" value="3060" required />
+          </div>
+          <div class="col">
+            <label for="empId">Employee ID</label>
+            <input id="empId" type="text" required />
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px">
+          <div>
+            <label for="empSSS">SSS (weekly)</label>
+            <input id="empSSS" type="number" value="300" min="0" />
+          </div>
+          <div>
+            <label for="empPhilhealth">PhilHealth (weekly)</label>
+            <input id="empPhilhealth" type="number" value="250" min="0" />
+          </div>
+          <div>
+            <label for="empPagibig">Pag-IBIG (weekly)</label>
+            <input id="empPagibig" type="number" value="200" min="0" />
+          </div>
+        </div>
+        <!-- Late deduction fields removed per request -->
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+          <button type="button" id="cancelModal" class="secondary">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Leave reject modal: admin can add a comment when rejecting a leave request -->
+  <div id="leaveRejectModal" class="modal-backdrop" role="dialog" aria-hidden="true" style="display:none">
+    <div class="modal" role="document" style="max-width:520px;width:95%">
+      <h3>Reject Leave Request</h3>
+      <p style="margin:8px 0;color:#4b5563">This message will be sent to the employee and stored with the request.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <textarea id="leaveRejectReason" rows="6" style="width:100%;padding:10px;border-radius:6px;border:1px solid #e5e7eb;resize:none"></textarea>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button id="leaveRejectCancel" class="secondary">Cancel</button>
+          <button id="leaveRejectConfirm" style="background:#ef4444;color:#fff;padding:8px 12px;border-radius:6px;border:none">Reject & Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase (compat) SDKs - required for Firestore integration -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXMVNhO02SzTjIANemKa03aTwn7n0qN-M",
+      authDomain: "c4s-food-solution.firebaseapp.com",
+      databaseURL: "https://c4s-food-solution-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "c4s-food-solution",
+      storageBucket: "c4s-food-solution.firebasestorage.app",
+      messagingSenderId: "810323252056",
+      appId: "1:810323252056:web:44506ae07f0ef43f2e4b2d",
+      measurementId: "G-QH851MYKYT"
+    };
+    try{
+      firebase.initializeApp(firebaseConfig);
+      console.log('Firebase initialized');
+    }catch(e){ console.warn('Firebase init skipped or failed:', e); }
+  </script>
+
+  <!-- Chart.js (for attendance chart) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

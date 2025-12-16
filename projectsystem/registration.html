@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="register.css">
+<title>Employee Registration</title>
+</head>
+<body>
+<div class="animated-background"></div>
+<div class="login-wrapper">
+  <div class="user-icon">
+    <img src="src/logo.png" alt="Logo" class="logo-img">
+  </div>
+  <div class="container" id="register-form">
+    <h2>Employee Registration</h2>
+    <form id="regForm">
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.59 22C20.59 18.13 16.74 15 12 15C7.26 15 3.41 18.13 3.41 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="fullname" name="fullname" placeholder="Full Name" required />
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+          <select id="role" name="role" required style="width:100%;padding:10px 12px;background:transparent;border:none;color:#111;font-size:16px">
+            <option value="" disabled selected>Select Role</option>
+            <option value="cashier">Cashier</option>
+            <option value="sales representative/ customer service">Sales representative/ Customer service</option>
+            <option value="driver">Driver</option>
+            <option value="sales representative">Sales representative</option>
+            <option value="checker">Checker</option>
+            <option value="packer">Packer</option>
+            <option value="sales agent">Sales agent</option>
+            <option value="warehouse head">Warehouse head</option>
+            <option value="warehouse staff">Warehouse staff</option>
+          </select>
+          <style>
+            /* keep the closed select label readable (dark) but make the open list items white */
+            select#role { color: #111 !important; }
+            select#role option { color: #000000 !important; background: transparent !important; }
+          </style>
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="L22 6L12 13L2 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="email" id="email" name="email" placeholder="Email" required />
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="7" r="4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="username" name="username" placeholder="Username" required />
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="password" id="password" name="password" placeholder="Password" required />
+      </div>
+
+      <div class="input-wrapper">
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required />
+      </div>
+
+      <button type="submit">REGISTER</button>
+    </form>
+
+    <div id="message" style="margin-top:12px;color:#fff;text-align:center;display:none;font-size:14px;"></div>
+    <div style="margin-top:20px; text-align:center;">
+      <span style="color:rgba(255,255,255,0.8);">already have an account? </span>
+      <a href="login.html" style="color:#fff; text-decoration:underline;font-weight:500;">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config -->
+<script>
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXMVNhO02SzTjIANemKa03aTwn7n0qN-M",
+    authDomain: "c4s-food-solution.firebaseapp.com",
+    databaseURL: "https://c4s-food-solution-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "c4s-food-solution",
+    storageBucket: "c4s-food-solution.firebasestorage.app",
+    messagingSenderId: "810323252056",
+    appId: "1:810323252056:web:44506ae07f0ef43f2e4b2d",
+    measurementId: "G-QH851MYKYT"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+<!-- Registration Script -->
+<script>
+document.querySelector('#regForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const fullname = document.getElementById('fullname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const username = document.getElementById('username').value.trim();
+  const role = document.getElementById('role').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm-password').value;
+  const messageEl = document.getElementById('message');
+
+  function showMessage(text, isError = true) {
+    messageEl.textContent = text;
+    messageEl.style.color = isError ? '#ff6b6b' : '#51cf66';
+    messageEl.style.display = 'block';
+    setTimeout(() => messageEl.style.display = 'none', 4000);
+  }
+
+  if (password !== confirmPassword) {
+    showMessage("Passwords do not match!");
+    return;
+  }
+
+  try {
+    // Create Firebase Auth user
+    const userCred = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    const uid = userCred.user.uid;
+
+    // Create a short 4-digit employee code (used as the employee ID visible in the UI)
+    async function generateUniqueEmployeeCode(attemptsLeft){
+      attemptsLeft = typeof attemptsLeft === 'number' ? attemptsLeft : 10;
+      if(attemptsLeft <= 0) return null;
+      // Generate 4-digit code between 1000 and 9999 (inclusive)
+      const code = String(Math.floor(1000 + Math.random() * 9000));
+      // Check localStorage for collisions first
+      try{
+        const adminEmployees = JSON.parse(localStorage.getItem('payroll_employees') || '[]');
+        if(adminEmployees.some(e => String(e.id) === String(code))) return generateUniqueEmployeeCode(attemptsLeft - 1);
+      }catch(e){ /* ignore local collision check error */ }
+      // Check Firestore doc existence
+      try{
+        const doc = await db.collection('employees').doc(code).get();
+        if(doc.exists){
+          return generateUniqueEmployeeCode(attemptsLeft - 1);
+        }
+        return code;
+      }catch(e){
+        // Firestore failed (offline or permission) — use local uniqueness only; if collision retry
+        try{
+          const adminEmployees = JSON.parse(localStorage.getItem('payroll_employees') || '[]');
+          if(adminEmployees.some(e => String(e.id) === String(code))) return generateUniqueEmployeeCode(attemptsLeft - 1);
+        }catch(er){}
+        return code;
+      }
+    }
+
+    // Try to generate a unique 4-digit employee code. If not possible, fall back to using the Firebase UID.
+    let employeeCode = await generateUniqueEmployeeCode(12);
+    if(!employeeCode) employeeCode = uid;
+
+    // Create employee document in Firestore using the employeeCode as the document id
+    await db.collection("employees").doc(employeeCode).set({
+      authUid: uid,
+      employeeId: employeeCode,
+      fullname: fullname,
+      email: email,
+      username: username,
+      role: role,
+      // store salary in the app as annual equivalent; default weekly = 3060
+      salary: 3060 * 52,
+      deductions: {
+        sss: 300,
+        philhealth: 250,
+        pagibig: 200
+      },
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    // Also update localStorage so the admin UI (which reads from localStorage)
+    // will reflect the new employee even if the app hasn't been migrated fully to Firestore.
+    try{
+      // payroll_credentials: map of id -> minimal credential (kept without plaintext password)
+      const credMap = JSON.parse(localStorage.getItem('payroll_credentials') || '{}');
+      credMap[employeeCode] = {
+        email: email,
+        username: username,
+        password: '', // do NOT store plaintext password for Firebase users
+        fullname: fullname,
+        employeeId: employeeCode,
+        authUid: uid
+      };
+      localStorage.setItem('payroll_credentials', JSON.stringify(credMap));
+
+      // payroll_employees: array used by admin dashboard
+      const adminEmployees = JSON.parse(localStorage.getItem('payroll_employees') || '[]');
+      const exists = adminEmployees.some(e => String(e.id) === String(employeeCode));
+      if(!exists){
+        adminEmployees.push({
+          id: employeeCode,
+          name: fullname,
+          role: role,
+          // store annual salary (weekly 3060 * 52)
+          salary: 3060 * 52,
+          lastNet: '—',
+          deductions: { sss: 300, philhealth: 250, pagibig: 200 }
+        });
+        localStorage.setItem('payroll_employees', JSON.stringify(adminEmployees));
+      }
+    }catch(e){ console.warn('Failed to update localStorage during registration:', e); }
+
+    showMessage("Registration successful!", false);
+
+    alert("Registration successful! Your Employee ID is: " + employeeCode);
+    window.location.href = "login.html";
+
+  } catch (err) {
+    showMessage(err.message);
+  }
+});
+</script>
+
+</body>
+</html>
